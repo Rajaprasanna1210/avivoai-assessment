@@ -35,7 +35,18 @@ const initDb = () => {
       db.query(tableSQL, (err) => {
         if (err) return reject(err);
         console.log('✅ User table ready.');
-        resolve(db);
+
+        const sampleInsert = `
+          INSERT IGNORE INTO users (firstName, lastName, company, role, country) VALUES
+          ('Emily', 'Johnson', 'Dooley, Kozey and Cronin', 'admin', 'United States'),
+          ('Michael', 'Williams', 'Spinka - Dickinson', 'admin', 'United States');
+        `;
+
+        db.query(sampleInsert, (err) => {
+          if (err) return reject(err);
+          console.log('✅ Sample users inserted (duplicates based on firstName ignored).');
+          resolve(db);
+        });
       });
     });
   });
